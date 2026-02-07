@@ -156,13 +156,65 @@ export default function App() {
               transition={{ duration: 0.6 }}
               className="w-full flex items-center justify-center"
             >
-              <div className="w-full max-w-sm sm:max-w-md">
-                <img
-                  src="https://images.unsplash.com/photo-1696581875199-1df6237d9a6f?w=400&h=500&fit=crop"
-                  alt="Assistant Lady AI"
-                  className="w-full h-auto object-contain drop-shadow-2xl rounded-xl"
-                  loading="lazy"
-                />
+              <div className="w-full max-w-sm sm:max-w-md relative bg-gradient-to-b from-green-100 to-blue-50 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center min-h-96">
+                <svg className="w-full h-full p-4" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+                  {/* Head */}
+                  <circle cx="200" cy="120" r="60" fill="#f4a460" />
+                  
+                  {/* Hair */}
+                  <path d="M 140 120 Q 140 50 200 50 Q 260 50 260 120" fill="#2c2c2c" />
+                  
+                  {/* Eyes */}
+                  <circle cx="175" cy="110" r="12" fill="#4a90e2" />
+                  <circle cx="225" cy="110" r="12" fill="#4a90e2" />
+                  <circle cx="177" cy="108" r="6" fill="white" />
+                  <circle cx="227" cy="108" r="6" fill="white" />
+                  
+                  {/* Smile */}
+                  <path d="M 175 135 Q 200 150 225 135" stroke="#333" strokeWidth="2" fill="none" strokeLinecap="round" />
+                  
+                  {/* Headphones */}
+                  <g>
+                    {/* Left ear cup */}
+                    <circle cx="130" cy="115" r="18" fill="#0088ff" />
+                    <circle cx="130" cy="115" r="14" fill="#00d4ff" />
+                    
+                    {/* Right ear cup */}
+                    <circle cx="270" cy="115" r="18" fill="#0088ff" />
+                    <circle cx="270" cy="115" r="14" fill="#00d4ff" />
+                    
+                    {/* Headband */}
+                    <path d="M 130 97 Q 200 70 270 97" stroke="#0088ff" strokeWidth="6" fill="none" />
+                  </g>
+                  
+                  {/* Body - Professional outfit */}
+                  <ellipse cx="200" cy="280" rx="70" ry="90" fill="#1a1a2e" />
+                  
+                  {/* Accent glow */}
+                  <circle cx="200" cy="240" r="30" fill="#00d4ff" opacity="0.3" />
+                  
+                  {/* Arms */}
+                  <g>
+                    {/* Left arm */}
+                    <path d="M 140 220 Q 90 240 80 290" stroke="#f4a460" strokeWidth="16" fill="none" strokeLinecap="round" />
+                    
+                    {/* Right arm */}
+                    <path d="M 260 220 Q 310 240 320 290" stroke="#f4a460" strokeWidth="16" fill="none" strokeLinecap="round" />
+                  </g>
+                  
+                  {/* Legs */}
+                  <g>
+                    {/* Left leg */}
+                    <rect x="170" y="360" width="18" height="80" rx="9" fill="#1a1a2e" />
+                    
+                    {/* Right leg */}
+                    <rect x="212" y="360" width="18" height="80" rx="9" fill="#1a1a2e" />
+                  </g>
+                  
+                  {/* Shoes */}
+                  <ellipse cx="179" cy="445" rx="16" ry="12" fill="#333" />
+                  <ellipse cx="221" cy="445" rx="16" ry="12" fill="#333" />
+                </svg>
               </div>
             </motion.div>
           </div>
