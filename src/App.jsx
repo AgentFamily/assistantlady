@@ -1,23 +1,5 @@
 import { motion } from 'framer-motion';
-import { Magic } from 'magic-sdk';
-import { useEffect, useMemo, useState } from 'react';
-
-function resolveMagicPublishableKey() {
-  if (typeof window !== 'undefined') {
-    const w = window;
-    if (typeof w.__MAGIC_PUBLISHABLE_KEY__ === 'string' && w.__MAGIC_PUBLISHABLE_KEY__.trim()) {
-      return w.__MAGIC_PUBLISHABLE_KEY__.trim();
-    }
-  }
-  try {
-    const meta = typeof import.meta !== 'undefined' ? import.meta : undefined;
-    const key = meta?.env?.VITE_MAGIC_PUBLISHABLE_KEY;
-    if (typeof key === 'string' && key.trim()) return key.trim();
-  } catch {
-    // ignore
-  }
-  return 'YOUR_MAGIC_PUBLISHABLE_KEY';
-}
+import { useState } from 'react';
 
 function Button({ children, className = '', variant = 'default', disabled = false, onClick }) {
   const baseStyles = 'px-4 sm:px-6 py-2 sm:py-3 rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base';
@@ -38,56 +20,39 @@ function Button({ children, className = '', variant = 'default', disabled = fals
 
 export default function App() {
   const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState(null);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
 
-  const magicKey = useMemo(() => resolveMagicPublishableKey(), []);
-
-  const magic = useMemo(() => {
-    if (typeof window === 'undefined') return null;
-    if (!magicKey || magicKey === 'YOUR_MAGIC_PUBLISHABLE_KEY') return null;
-    return new Magic(magicKey);
-  }, [magicKey]);
-
-  useEffect(() => {
-    if (magicKey === 'YOUR_MAGIC_PUBLISHABLE_KEY') {
-      setStatus('Configure Magic publishable key: set window.__MAGIC_PUBLISHABLE_KEY__ (or VITE_MAGIC_PUBLISHABLE_KEY).');
-    } else {
-      setStatus(null);
-    }
-  }, [magicKey]);
-
-  const handleMagicLogin = async () => {
-    if (!email.trim()) {
-      setStatus('Please enter a valid email.');
-      return;
-    }
-    if (!magic) {
-      setStatus('Magic Link is not configured yet. Add your publishable key (window.__MAGIC_PUBLISHABLE_KEY__).');
-      return;
-    }
-
-    setLoading(true);
-    setStatus(null);
-    try {
-      await magic.auth.loginWithMagicLink({ email: email.trim() });
-      setStatus('✅ Login link verified. Redirect to dashboard (wire routing next).');
-    } catch (err) {
-      console.error(err);
-      setStatus('Login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+  // Stripe payment links
+  const STRIPE_LINKS = {
+    starter: 'https://buy.stripe.com/6oUdR87Yz8PL0t17md', // £20
+    professional: 'https://buy.stripe.com/cNi9ASfr11nj7Vt9ul', // £99
+    enterprise: 'https://buy.stripe.com/9B614mbaLaXT0t10XP', // £200
   };
 
-  const handlePayment = () => {
-    // Redirect to Stripe payment
-    window.location.href = 'https://buy.stripe.com/3cI28q6Uv2rncbJ8qhgrS08';
+  const CALENDLY_LINK = 'https://calendly.com/mkarimianzade';
+
+  const handleStartTrial = (tier = 'professional') => {
+    // Direct to Stripe payment for the selected tier
+    window.location.href = STRIPE_LINKS[tier];
   };
 
-  const handlePostPayment = () => {
-    // Redirect to Calendly after payment is complete
-    window.location.href = 'https://calendly.com/mkarimianzade';
+  const handleBookDemo = () => {
+    window.open(CALENDLY_LINK, '_blank');
+  };
+
+  const handleEmailSubmit = (e) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    
+    // Simple email capture - no backend needed
+    setEmailSubmitted(true);
+    console.log('Email captured:', email);
+    
+    // After showing success message, redirect to Calendly
+    setTimeout(() => {
+      handleBookDemo();
+    }, 2000);
   };
 
   return (
@@ -117,47 +82,50 @@ export default function App() {
               transition={{ duration: 0.6 }}
               className="w-full"
             >
-              <div className="inline-block bg-green-50 border border-green-200 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6">
-                <p className="text-xs sm:text-sm font-semibold text-green-700">🎙️ 24/7 Lead Management</p>
+              <div className="inline-block bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6 shadow-sm">
+                <p className="text-xs sm:text-sm font-semibold text-green-700">🎙️ AI-Powered Lead Assistant</p>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6 break-words">
-                Meet <span className="text-green-600">Miss.Lead</span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6 break-words leading-tight">
+                Never Miss a Lead. <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">Ever Again.</span>
               </h1>
 
-              <p className="text-base sm:text-lg md:text-xl text-slate-600 mb-3 sm:mb-4 leading-relaxed">
-                <strong>Bottom line:</strong> Miss.Lead answers calls and qualifies leads 24/7—so you never miss an opportunity.
-              </p>
-              <p className="text-sm sm:text-base md:text-lg text-slate-500 mb-6 sm:mb-10 leading-relaxed">
-                <strong>Briefly:</strong> Real-time qualification, automatic appointment booking, and relentless follow-up—all handled professionally.
+              <p className="text-base sm:text-lg md:text-xl text-slate-600 mb-6 sm:mb-8 leading-relaxed">
+                Your AI assistant answers every call, qualifies leads instantly, and books appointments to your calendar—24/7, without fail.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6 w-full">
-                <input
-                  type="email"
-                  placeholder="Work email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full sm:flex-1 rounded-full border border-slate-300 px-4 sm:px-6 py-2.5 sm:py-4 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-                />
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8 w-full">
                 <Button
-                  onClick={handleMagicLogin}
-                  disabled={loading}
-                  className="bg-green-600 hover:bg-green-700 text-white whitespace-nowrap w-full sm:w-auto"
+                  onClick={() => handleStartTrial('professional')}
+                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white whitespace-nowrap w-full sm:w-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
                 >
-                  {loading ? 'Sending...' : 'Get Started'}
+                  Start Free Trial
+                </Button>
+                <Button
+                  onClick={handleBookDemo}
+                  variant="outline"
+                  className="border-2 border-slate-300 text-slate-700 hover:border-green-600 hover:text-green-600 hover:bg-green-50 whitespace-nowrap w-full sm:w-auto transition-all"
+                >
+                  Book Demo
                 </Button>
               </div>
 
-              {status && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-xs sm:text-sm bg-white/70 border border-slate-200 rounded-full p-3 sm:p-4 inline-block max-w-md"
-                >
-                  {status}
-                </motion.div>
-              )}
+              {/* Proof Row */}
+              <div className="flex flex-wrap gap-4 sm:gap-6 text-xs sm:text-sm text-slate-600">
+                <div className="flex items-center gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span>&lt;1 min response</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span>24/7 coverage</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span>Books to your calendar</span>
+                </div>
+              </div>
             </motion.div>
 
             <motion.div
@@ -179,65 +147,48 @@ export default function App() {
         </div>
       </section>
 
-      {/* Brand Showcase Section */}
-      <section id="brand" className="w-full bg-gradient-to-r from-green-50 to-blue-50 py-12 sm:py-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-8 sm:mb-12"
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-slate-900">Miss.Lead - The Original</h2>
-            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
-              Powered by advanced AI technology and years of real estate expertise
-            </p>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-center w-full"
-          >
-            <div className="w-full max-w-2xl h-64 sm:h-80 md:h-96 overflow-hidden rounded-2xl shadow-2xl">
-              <img
-                src="/misslead.svg"
-                alt="Miss.Lead Brand"
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Key Metrics */}
-      <section className="w-full bg-white py-12 sm:py-16 border-y border-slate-200">
+      <section className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white py-12 sm:py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
             {[
               { metric: '24/7', label: 'Always Available' },
-              { metric: '< 1min', label: 'Response Time' },
+              { metric: '<1min', label: 'Response Time' },
               { metric: '100%', label: 'Lead Capture' },
               { metric: '∞', label: 'Follow-up Cycles' },
             ].map((item, i) => (
-              <div key={i} className="text-center">
-                <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-600 mb-1 sm:mb-2">{item.metric}</p>
-                <p className="text-xs sm:text-sm md:text-base text-slate-600">{item.label}</p>
-              </div>
+              <motion.div 
+                key={i} 
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400 mb-1 sm:mb-2">{item.metric}</p>
+                <p className="text-xs sm:text-sm md:text-base text-slate-300">{item.label}</p>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Core Features */}
-      <section id="features" className="w-full px-4 sm:px-6 py-12 sm:py-24">
+      <section id="features" className="w-full px-4 sm:px-6 py-12 sm:py-24 bg-gradient-to-b from-white to-slate-50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-16">What Miss.Lead Does For You</h2>
-          <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-12 sm:mb-16"
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">What Miss.Lead Does For You</h2>
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
+              Everything you need to capture, qualify, and convert every lead—automatically
+            </p>
+          </motion.div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 title: '24/7 Call Handling',
@@ -276,10 +227,10 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 hover:shadow-lg transition"
+                className="bg-white border-2 border-slate-200 rounded-2xl p-6 sm:p-8 hover:border-green-500 hover:shadow-xl transition-all group"
               >
-                <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">{feature.icon}</div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-slate-900">{feature.title}</h3>
+                <div className="text-4xl sm:text-5xl mb-4 transform group-hover:scale-110 transition-transform">{feature.icon}</div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-3 text-slate-900 group-hover:text-green-600 transition-colors">{feature.title}</h3>
                 <p className="text-sm sm:text-base text-slate-600 leading-relaxed">{feature.desc}</p>
               </motion.div>
             ))}
@@ -326,19 +277,62 @@ export default function App() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="w-full bg-white py-12 sm:py-24 border-t border-slate-200 px-4 sm:px-6">
+      <section id="pricing" className="w-full bg-gradient-to-b from-white to-slate-50 py-12 sm:py-24 border-t border-slate-200 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Simple. Performance-Based Pricing.</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Simple, Transparent Pricing</h2>
             <p className="text-base sm:text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
-              No hidden fees. No commitments. Scale up or down with your business.
+              No hidden fees. No long-term commitments. Scale as you grow.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
             {[
-              { tier: 'Starter', price: '$99', leads: 'Up to 50 leads/mo', featured: false },
-              { tier: 'Professional', price: '$299', leads: 'Up to 500 leads/mo', featured: true },
-              { tier: 'Enterprise', price: 'Custom', leads: 'Unlimited leads', featured: false },
+              { 
+                tier: 'Starter', 
+                price: '£20', 
+                leads: 'Up to 50 leads/mo',
+                features: [
+                  '24/7 call answering',
+                  'Basic lead qualification',
+                  'Email notifications',
+                  'Calendar integration',
+                  'Call recordings',
+                  'Monthly reports'
+                ],
+                featured: false,
+                stripeKey: 'starter'
+              },
+              { 
+                tier: 'Professional', 
+                price: '£99', 
+                leads: 'Up to 500 leads/mo',
+                features: [
+                  'Everything in Starter',
+                  'Advanced qualification',
+                  'Custom scripts',
+                  'Priority support',
+                  'CRM integrations',
+                  'Real-time analytics'
+                ],
+                featured: true,
+                stripeKey: 'professional'
+              },
+              { 
+                tier: 'Enterprise', 
+                price: '£200', 
+                leads: 'Unlimited leads',
+                features: [
+                  'Everything in Professional',
+                  'Dedicated account manager',
+                  'Custom AI training',
+                  'White-label options',
+                  'API access',
+                  'SLA guarantees'
+                ],
+                featured: false,
+                stripeKey: 'enterprise',
+                isEnterprise: true
+              },
             ].map((plan, i) => (
               <motion.div
                 key={i}
@@ -346,31 +340,49 @@ export default function App() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className={`rounded-2xl p-6 sm:p-8 ${
+                className={`rounded-2xl p-6 sm:p-8 relative ${
                   plan.featured
-                    ? 'bg-green-600 text-white border-2 border-green-600 lg:transform lg:scale-105'
-                    : 'bg-white border border-slate-200'
+                    ? 'bg-gradient-to-br from-green-600 to-emerald-600 text-white border-2 border-green-500 lg:transform lg:scale-105 shadow-2xl'
+                    : 'bg-white border-2 border-slate-200 shadow-lg hover:shadow-xl transition-shadow'
                 }`}
               >
+                {plan.featured && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-yellow-400 text-slate-900 text-xs font-bold px-4 py-1 rounded-full shadow-md">
+                      MOST POPULAR
+                    </span>
+                  </div>
+                )}
                 <h3 className="text-xl sm:text-2xl font-bold mb-2">{plan.tier}</h3>
                 <div className="mb-4 sm:mb-6">
                   <span className="text-3xl sm:text-4xl font-bold">{plan.price}</span>
-                  {plan.price !== 'Custom' && <span className="text-slate-400">/mo</span>}
+                  <span className={plan.featured ? 'text-green-100' : 'text-slate-400'}>/mo</span>
                 </div>
                 <p className={`mb-6 sm:mb-8 font-medium text-sm sm:text-base ${
                   plan.featured ? 'text-green-50' : 'text-slate-600'
                 }`}>
                   {plan.leads}
                 </p>
+                
+                {/* Features List */}
+                <ul className={`space-y-3 mb-8 text-sm ${plan.featured ? 'text-white' : 'text-slate-600'}`}>
+                  {plan.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className={`mt-0.5 ${plan.featured ? 'text-green-200' : 'text-green-600'}`}>✓</span>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                
                 <Button
-                  onClick={handlePayment}
-                  className={`w-full text-sm sm:text-base ${
+                  onClick={() => plan.isEnterprise ? handleBookDemo() : handleStartTrial(plan.stripeKey)}
+                  className={`w-full text-sm sm:text-base font-semibold ${
                     plan.featured
-                      ? 'bg-white text-green-600 hover:bg-green-50'
-                      : 'bg-green-600 text-white hover:bg-green-700'
+                      ? 'bg-white text-green-600 hover:bg-green-50 shadow-lg'
+                      : 'bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 shadow-md'
                   }`}
                 >
-                  Get Started
+                  {plan.isEnterprise ? 'Talk to Sales' : 'Get Started'}
                 </Button>
               </motion.div>
             ))}
@@ -378,25 +390,88 @@ export default function App() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section id="faq" className="w-full bg-white py-12 sm:py-24 px-4 sm:px-6 border-t border-slate-200">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-12 sm:mb-16"
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+            <p className="text-base sm:text-lg text-slate-600">
+              Everything you need to know about Miss.Lead
+            </p>
+          </motion.div>
+
+          <div className="space-y-6">
+            {[
+              {
+                q: 'Does it sound human?',
+                a: 'Yes! Miss.Lead uses advanced AI trained on thousands of real conversations. Leads won\'t know they\'re speaking with an AI—she sounds natural, professional, and personable.'
+              },
+              {
+                q: 'What if it can\'t answer a question?',
+                a: 'Miss.Lead is trained on your business specifics, but if she encounters something unexpected, she\'ll politely take a message and ensure you get notified immediately to follow up personally.'
+              },
+              {
+                q: 'Can I customize the script?',
+                a: 'Absolutely. You can tailor the conversation flow, talking points, qualification questions, and even Miss.Lead\'s personality to match your brand and sales process perfectly.'
+              },
+              {
+                q: 'Can it transfer calls to me?',
+                a: 'Yes! If a lead requests to speak with you directly, or if Miss.Lead identifies a high-priority opportunity, she can transfer the call to you or your team in real-time.'
+              },
+              {
+                q: 'What integrations are available?',
+                a: 'Miss.Lead integrates with all major CRMs (Salesforce, HubSpot, Zoho), calendar systems (Google, Outlook, Calendly), and communication tools. We also offer API access for custom integrations.'
+              }
+            ].map((faq, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-gradient-to-br from-slate-50 to-white border border-slate-200 rounded-xl p-6 hover:shadow-md transition-shadow"
+              >
+                <h3 className="text-lg sm:text-xl font-semibold mb-3 text-slate-900">{faq.q}</h3>
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">{faq.a}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Final */}
-      <section className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-12 sm:py-24 px-4 sm:px-6 text-center">
+      <section className="w-full bg-gradient-to-br from-green-600 via-emerald-600 to-green-700 text-white py-12 sm:py-24 px-4 sm:px-6 text-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2YzAtMTEuMDQ1LTguOTU1LTIwLTIwLTIwUzAtNC45NTUgMCA2czguOTU1IDIwIDIwIDIwIDIwLTguOTU1IDIwLTIwem0tMTQgMGMwIDMuMzE0LTIuNjg2IDYtNiA2cy02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNiA2IDIuNjg2IDYgNnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="max-w-4xl mx-auto"
+          className="max-w-4xl mx-auto relative z-10"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">Stop Leaving Money on the Table</h2>
-          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-10 opacity-95 max-w-2xl mx-auto">
-            Every missed lead is a missed commission. Miss.Lead ensures you capture every opportunity, qualify faster, and close more deals.
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">Ready to Capture Every Lead?</h2>
+          <p className="text-base sm:text-lg md:text-xl mb-8 sm:mb-10 opacity-95 max-w-2xl mx-auto">
+            Join hundreds of real estate professionals who never miss an opportunity. Start your free trial today.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-            <Button className="bg-white text-green-600 hover:bg-slate-50 w-full sm:w-auto">
+            <Button 
+              onClick={() => handleStartTrial('professional')}
+              className="bg-white text-green-600 hover:bg-slate-50 w-full sm:w-auto shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all font-semibold"
+            >
               Start Free Trial
             </Button>
-            <Button variant="outline" className="text-white border-white hover:bg-green-700 w-full sm:w-auto">
-              Schedule Demo
+            <Button 
+              onClick={handleBookDemo}
+              variant="outline" 
+              className="text-white border-2 border-white hover:bg-white/10 w-full sm:w-auto backdrop-blur-sm transition-all font-semibold"
+            >
+              Book Demo
             </Button>
           </div>
         </motion.div>
@@ -416,6 +491,7 @@ export default function App() {
                 <li><a href="#features" className="hover:text-white transition">Features</a></li>
                 <li><a href="#how-it-works" className="hover:text-white transition">How It Works</a></li>
                 <li><a href="#pricing" className="hover:text-white transition">Pricing</a></li>
+                <li><a href="#faq" className="hover:text-white transition">FAQ</a></li>
               </ul>
             </div>
             <div>
@@ -423,7 +499,7 @@ export default function App() {
               <ul className="text-xs sm:text-sm space-y-2">
                 <li><a href="#" className="hover:text-white transition">Documentation</a></li>
                 <li><a href="#" className="hover:text-white transition">Contact</a></li>
-                <li><a href="#" className="hover:text-white transition">FAQ</a></li>
+                <li><a href="#faq" className="hover:text-white transition">FAQ</a></li>
               </ul>
             </div>
             <div>
@@ -439,6 +515,28 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Sticky Mobile CTA Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 border-slate-200 p-3 shadow-2xl z-50 backdrop-blur-lg bg-white/95">
+        <div className="flex gap-2 max-w-md mx-auto">
+          <Button
+            onClick={() => handleStartTrial('professional')}
+            className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-sm font-semibold shadow-lg"
+          >
+            Start Trial
+          </Button>
+          <Button
+            onClick={handleBookDemo}
+            variant="outline"
+            className="flex-1 border-2 border-green-600 text-green-600 hover:bg-green-50 text-sm font-semibold"
+          >
+            Book Demo
+          </Button>
+        </div>
+      </div>
+
+      {/* Add bottom padding on mobile to prevent content being covered by sticky CTA */}
+      <div className="md:hidden h-20"></div>
     </div>
   );
 }
