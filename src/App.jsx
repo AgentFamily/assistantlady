@@ -87,6 +87,11 @@ export default function App() {
       professional: 'https://buy.stripe.com/3cI28qgv5fe9a3BaypgrS0f', // £99
       enterprise: 'https://buy.stripe.com/14A28q0w7aXT3Fd21TgrS0g', // £200
     };
+    
+    if (!stripeLinks[tier]) {
+      console.warn(`Invalid tier "${tier}" provided. Defaulting to professional tier.`);
+    }
+    
     window.location.href = stripeLinks[tier] || stripeLinks.professional;
   };
 
