@@ -80,6 +80,16 @@ export default function App() {
     }
   };
 
+  const handlePayment = () => {
+    // Redirect to Stripe payment
+    window.location.href = 'https://buy.stripe.com/3cI28q6Uv2rncbJ8qhgrS08';
+  };
+
+  const handlePostPayment = () => {
+    // Redirect to Calendly after payment is complete
+    window.location.href = 'https://calendly.com/mkarimianzade';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 font-sans overflow-x-hidden">
       {/* Navigation */}
@@ -353,6 +363,7 @@ export default function App() {
                   {plan.leads}
                 </p>
                 <Button
+                  onClick={handlePayment}
                   className={`w-full text-sm sm:text-base ${
                     plan.featured
                       ? 'bg-white text-green-600 hover:bg-green-50'
