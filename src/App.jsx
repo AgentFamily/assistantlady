@@ -153,9 +153,11 @@ export default function App() {
           transition={{ duration: 0.6 }}
           className="relative flex items-center justify-center"
         >
-          <div className="w-full max-w-md aspect-square bg-gradient-to-br from-green-100 to-green-50 rounded-3xl flex items-center justify-center">
-            <div className="text-9xl">🤖</div>
-          </div>
+          <img
+            src="https://images.unsplash.com/photo-1696581875199-1df6237d9a6f?w=600&h=700&fit=crop"
+            alt="Miss.Lead AI Assistant"
+            className="w-full max-w-md h-auto object-contain drop-shadow-2xl"
+          />
         </motion.div>
       </section>
 
