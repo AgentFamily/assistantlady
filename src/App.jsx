@@ -80,9 +80,19 @@ export default function App() {
     }
   };
 
-  const handlePayment = () => {
-    // Redirect to Stripe payment
-    window.location.href = 'https://buy.stripe.com/3cI28q6Uv2rncbJ8qhgrS08';
+  const handlePayment = (tier) => {
+    // Redirect to Stripe payment based on tier
+    const stripeLinks = {
+      starter: 'https://buy.stripe.com/eVq9AS2Ef8PLcbJ8qhgrS0e', // £20
+      professional: 'https://buy.stripe.com/3cI28qgv5fe9a3BaypgrS0f', // £99
+      enterprise: 'https://buy.stripe.com/14A28q0w7aXT3Fd21TgrS0g', // £200
+    };
+    
+    if (!stripeLinks[tier]) {
+      console.warn(`Invalid tier "${tier}" provided. Defaulting to professional tier.`);
+    }
+    
+    window.location.href = stripeLinks[tier] || stripeLinks.professional;
   };
 
   const handlePostPayment = () => {
@@ -96,8 +106,7 @@ export default function App() {
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-slate-200 w-full">
         <div className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div className="text-lg sm:text-2xl font-bold whitespace-nowrap">
-            <span>Assistant</span>
-            <span className="text-green-600"> Lady</span>
+            <span className="text-green-600">Miss.Lead</span>
           </div>
           <div className="hidden md:flex items-center gap-6 sm:gap-8">
             <a href="#features" className="text-sm sm:text-base text-slate-600 hover:text-slate-900 transition">Features</a>
@@ -336,9 +345,9 @@ export default function App() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
             {[
-              { tier: 'Starter', price: '$99', leads: 'Up to 50 leads/mo', featured: false },
-              { tier: 'Professional', price: '$299', leads: 'Up to 500 leads/mo', featured: true },
-              { tier: 'Enterprise', price: 'Custom', leads: 'Unlimited leads', featured: false },
+              { tier: 'Starter', price: '£20', leads: 'Up to 50 leads/mo', featured: false, tierKey: 'starter' },
+              { tier: 'Professional', price: '£99', leads: 'Up to 500 leads/mo', featured: true, tierKey: 'professional' },
+              { tier: 'Enterprise', price: '£200', leads: 'Unlimited leads', featured: false, tierKey: 'enterprise' },
             ].map((plan, i) => (
               <motion.div
                 key={i}
@@ -355,7 +364,7 @@ export default function App() {
                 <h3 className="text-xl sm:text-2xl font-bold mb-2">{plan.tier}</h3>
                 <div className="mb-4 sm:mb-6">
                   <span className="text-3xl sm:text-4xl font-bold">{plan.price}</span>
-                  {plan.price !== 'Custom' && <span className="text-slate-400">/mo</span>}
+                  <span className="text-slate-400">/mo</span>
                 </div>
                 <p className={`mb-6 sm:mb-8 font-medium text-sm sm:text-base ${
                   plan.featured ? 'text-green-50' : 'text-slate-600'
@@ -363,7 +372,7 @@ export default function App() {
                   {plan.leads}
                 </p>
                 <Button
-                  onClick={handlePayment}
+                  onClick={() => handlePayment(plan.tierKey)}
                   className={`w-full text-sm sm:text-base ${
                     plan.featured
                       ? 'bg-white text-green-600 hover:bg-green-50'
