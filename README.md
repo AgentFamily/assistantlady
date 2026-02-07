@@ -21,8 +21,15 @@
 
 1. Clone the repository
 2. Install dependencies: `npm install`
-3. Configure Magic Link auth key
-4. Run development server: `npm run dev`
+3. Run development server: `npm run dev`
+4. Build for production: `npm run build`
+
+### Configuration
+
+No additional configuration required. The app uses Stripe for payments and Calendly for demo bookings:
+
+- **Stripe Payment Links**: Integrated directly (no API keys needed)
+- **Calendly**: Opens in new tab for demo bookings
 
 ---
 
@@ -37,9 +44,9 @@
 
 ## 💼 Pricing
 
-- **Starter**: $99/mo (up to 50 leads)
-- **Professional**: $299/mo (up to 500 leads)
-- **Enterprise**: Custom pricing (unlimited)
+- **Starter**: £20/mo (up to 50 leads)
+- **Professional**: £99/mo (up to 500 leads) - **Most Popular**
+- **Enterprise**: £200/mo (unlimited leads)
 
 ---
 
