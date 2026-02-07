@@ -1,0 +1,33 @@
+{
+  "name": "assistantlady",
+  "version": "1.0.0",
+  "description": "Miss.Lead - AI-powered 24/7 lead management for real estate professionals",
+  "main": "index.jsx",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "ai",
+    "real-estate",
+    "lead-management",
+    "automation",
+    "miss-lead",
+    "assistant-lady"
+  ],
+  "author": "AgentFamily",
+  "license": "PROPRIETARY",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "framer-motion": "^10.16.0",
+    "magic-sdk": "^21.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.2.0",
+    "vite": "^5.0.0"
+  }
+}
