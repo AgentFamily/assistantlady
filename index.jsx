@@ -99,6 +99,16 @@ export default function AiRealtorLanding() {
     }
   };
 
+  const handlePayment = () => {
+    // Redirect to Stripe payment
+    window.location.href = "https://buy.stripe.com/3cI28q6Uv2rncbJ8qhgrS08";
+  };
+
+  const handlePostPayment = () => {
+    // Redirect to Calendly after payment is complete
+    window.location.href = "https://calendly.com/mkarimianzade";
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 font-sans">
       {/* Navigation */}
@@ -284,8 +294,8 @@ export default function AiRealtorLanding() {
               Watch Demo
             </Button>
             <Button
-              variant="outline"
-              className="rounded-full px-8 py-4 border-green-600 text-green-600 hover:bg-green-50"
+              onClick={handlePostPayment}
+              className="rounded-full px-8 py-4 border-2 border-green-600 text-green-600 hover:bg-green-50"
             >
               Contact Sales
             </Button>
@@ -404,6 +414,7 @@ export default function AiRealtorLanding() {
                   {plan.leads}
                 </p>
                 <Button
+                  onClick={handlePayment}
                   className={`w-full rounded-full py-3 font-semibold ${
                     plan.featured
                       ? "bg-white text-green-600 hover:bg-green-50"
@@ -431,12 +442,12 @@ export default function AiRealtorLanding() {
             Every missed lead is a missed commission. Miss.Lead ensures you capture every opportunity, qualify faster, and close more deals.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button className="rounded-full px-12 py-4 text-lg bg-white text-green-600 hover:bg-slate-50 font-semibold">
+            <Button onClick={handlePayment} className="rounded-full px-12 py-4 text-lg bg-white text-green-600 hover:bg-slate-50 font-semibold">
               Start Free Trial
             </Button>
             <Button
-              variant="outline"
-              className="rounded-full px-12 py-4 text-lg text-white border-white hover:bg-green-700 font-semibold"
+              onClick={handlePostPayment}
+              className="rounded-full px-12 py-4 text-lg text-white border-2 border-white hover:bg-green-700 font-semibold"
             >
               Schedule Demo
             </Button>
