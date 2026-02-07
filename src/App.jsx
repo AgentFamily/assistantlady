@@ -169,6 +169,41 @@ export default function App() {
         </div>
       </section>
 
+      {/* Brand Showcase Section */}
+      <section id="brand" className="w-full bg-gradient-to-r from-green-50 to-blue-50 py-12 sm:py-24 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-8 sm:mb-12"
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-slate-900">Miss.Lead - The Original</h2>
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
+              Powered by advanced AI technology and years of real estate expertise
+            </p>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="flex items-center justify-center w-full"
+          >
+            <div className="w-full max-w-2xl h-64 sm:h-80 md:h-96 overflow-hidden rounded-2xl shadow-2xl">
+              <img
+                src="/misslead.svg"
+                alt="Miss.Lead Brand"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Key Metrics */}
       <section className="w-full bg-white py-12 sm:py-16 border-y border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -389,7 +424,7 @@ export default function App() {
             </div>
           </div>
           <div className="border-t border-slate-700 pt-6 sm:pt-8 text-center text-xs sm:text-sm">
-            <p>© 2026 Assistant Lady. All rights reserved. | Licensed domains: assistantlady.*</p>
+            <p>© 2026 Assistant Lady. All rights reserved. | Licensed domains: assistantlady.* | misslead.*</p>
           </div>
         </div>
       </footer>
