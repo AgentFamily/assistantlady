@@ -112,11 +112,11 @@ export default function App() {
               </div>
 
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6 break-words">
-                Meet <span className="text-green-600">Assistant Lady</span>
+                Meet <span className="text-green-600">Miss.Lead</span>
               </h1>
 
               <p className="text-base sm:text-lg md:text-xl text-slate-600 mb-3 sm:mb-4 leading-relaxed">
-                <strong>Bottom line:</strong> Assistant Lady answers calls and qualifies leads 24/7—so you never miss an opportunity.
+                <strong>Bottom line:</strong> Miss.Lead answers calls and qualifies leads 24/7—so you never miss an opportunity.
               </p>
               <p className="text-sm sm:text-base md:text-lg text-slate-500 mb-6 sm:mb-10 leading-relaxed">
                 <strong>Briefly:</strong> Real-time qualification, automatic appointment booking, and relentless follow-up—all handled professionally.
@@ -226,7 +226,7 @@ export default function App() {
       {/* Core Features */}
       <section id="features" className="w-full px-4 sm:px-6 py-12 sm:py-24">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-16">What Assistant Lady Does For You</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-16">What Miss.Lead Does For You</h2>
           <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
             {[
               {
@@ -280,7 +280,7 @@ export default function App() {
       {/* How It Works */}
       <section id="how-it-works" className="w-full bg-slate-900 text-white py-12 sm:py-24 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 sm:mb-16 text-center">The Assistant Lady Workflow</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 sm:mb-16 text-center">The Miss.Lead Workflow</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
             {[
               { step: 1, title: 'Detect', desc: 'Lead arrives (call, form, portal)' },
@@ -378,7 +378,7 @@ export default function App() {
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">Stop Leaving Money on the Table</h2>
           <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-10 opacity-95 max-w-2xl mx-auto">
-            Every missed lead is a missed commission. Assistant Lady ensures you capture every opportunity, qualify faster, and close more deals.
+            Every missed lead is a missed commission. Miss.Lead ensures you capture every opportunity, qualify faster, and close more deals.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <Button className="bg-white text-green-600 hover:bg-slate-50 w-full sm:w-auto">
@@ -396,7 +396,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-6 sm:mb-8">
             <div>
-              <p className="font-bold text-white mb-3 sm:mb-4 text-sm sm:text-base">Assistant Lady</p>
+              <p className="font-bold text-white mb-3 sm:mb-4 text-sm sm:text-base">Miss.Lead</p>
               <p className="text-xs sm:text-sm">AI-powered lead management for real estate professionals.</p>
             </div>
             <div>
@@ -424,7 +424,7 @@ export default function App() {
             </div>
           </div>
           <div className="border-t border-slate-700 pt-6 sm:pt-8 text-center text-xs sm:text-sm">
-            <p>© 2026 Assistant Lady. All rights reserved. | Licensed domains: assistantlady.* | misslead.*</p>
+            <p>© 2026 Miss.Lead. All rights reserved. | Licensed domains: misslead.* | assistantlady.*</p>
           </div>
         </div>
       </footer>

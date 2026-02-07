@@ -1,4 +1,4 @@
-# AssistantLady / Miss.Lead
+# Miss.Lead
 
 ## AI-Powered 24/7 Lead Management for Real Estate Professionals
 
@@ -47,7 +47,7 @@
 
 - [misslead.info](https://misslead.info)
 - [misslead.eu](https://misslead.eu)
-- [assistantlady.com](https://assistantlady.com)
+- [misslead.com](https://misslead.com)
 
 ---
 
@@ -55,7 +55,7 @@
 
 - **Website**: [misslead.base44.app](https://misslead.base44.app)
 - **Email**: dev@misslead.info
-- **GitHub**: AgentFamily/assistantlady
+- **GitHub**: AgentFamily/miss-lead
 
 ---
 
